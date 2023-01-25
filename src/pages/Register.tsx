@@ -1,7 +1,10 @@
 import { Navigate, useNavigate } from 'react-router-dom';
+import DropdownLanguage from '../components/dropdown-language';
 import SidebarInfo from '../components/layouts/SidebarInfo';
+import Topbar from '../components/layouts/Topbar';
 import useAuth from '../hooks/useAuth';
 import FormRegister from '../modules/auth/FormRegister';
+import WrapperFormRegister from '../modules/auth/WrapperFormRegister';
 import { createUser } from '../services/auth.service';
 
 export default function Register() {
@@ -40,7 +43,10 @@ export default function Register() {
 	return (
 		<div className="min-h-screen flex flex-col sm:flex-row">
 			<SidebarInfo />
-			<div className="w-full container bg-white"></div>
+			<div className="w-full container bg-white">
+				<Topbar />
+				<WrapperFormRegister />
+			</div>
 		</div>
 	);
 }
