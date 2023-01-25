@@ -4,11 +4,12 @@ module.exports = {
 	theme: {
 		extend: {
 			fontFamily: {
-				nunito: ['Nunito Sans', 'sans-serif'],
+				lato: ['Lato', 'sans-serif'],
+				poppins: ['Poppins', 'sans-serif'],
 			},
 			container: {
 				center: true,
-				padding: '1.25rem',
+				padding: '1rem',
 			},
 		},
 	},
