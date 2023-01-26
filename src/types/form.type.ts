@@ -11,7 +11,7 @@ export type CustomFormPropsType = {
 type CommonFieldType = {
 	name: string;
 	label?: string;
-	labelBold?: boolean;
+	isLabelBold?: boolean;
 	placeholder?: string;
 	className?: string;
 	defaultValue?: string;
@@ -20,5 +20,10 @@ type CommonFieldType = {
 export type TextFieldPropsType = CommonFieldType & {
 	type?: 'text' | 'number' | 'email' | 'password';
 };
+
+export type SelectPropsType = Omit<
+	CommonFieldType,
+	'name' | 'placeholder' | 'defaultValue'
+>;
 
 export type DescriptionPropsType = CommonFieldType;

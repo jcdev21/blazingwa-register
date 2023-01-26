@@ -1,6 +1,6 @@
 const config = {
-	appName: 'Kanban Board',
-	apiHost: 'https://todo-api-18-140-52-65.rakamin.com',
+	appName: 'Blazingwa',
+	apiHost: 'https://nimda.blazingwa.com/api',
 };
 
 export default config;

@@ -1,18 +1,147 @@
-import { Listbox } from '@headlessui/react';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button, CustomForm, TextField } from '../../components';
-
-const people = [
-	{ id: 1, name: 'Durward Reynolds', unavailable: false },
-	{ id: 2, name: 'Kenton Towne', unavailable: false },
-	{ id: 3, name: 'Therese Wunsch', unavailable: false },
-	{ id: 4, name: 'Benedict Kessler', unavailable: true },
-	{ id: 5, name: 'Katelyn Rohan', unavailable: false },
-];
+import { useForm } from 'react-hook-form';
+import { Button } from '../../components';
+import FormGroup from '../../components/form-rhf/FormGroup';
+import SelectCountry, {
+	Country,
+} from '../../components/form-rhf/SelectCountry';
+import TextFieldRHF from '../../components/form-rhf/TextField';
+import { createMember } from '../../services/auth.service';
+import { getCountries } from '../../services/country.service';
 
 export default function FormRegister() {
-	const [selectedPerson, setSelectedPerson] = React.useState(people[0]);
+	const [countries, setCountries] = React.useState<Country[]>([]);
+	const { register, control, handleSubmit } = useForm();
+	const onSubmit = async (data: any) => {
+		const { country, ...payload } = data;
+		payload.country = country.iso;
+		payload.mobile_code = country.iso;
+
+		const result = await createMember(payload);
+		console.log(result);
+	};
+
+	React.useEffect(() => {
+		const getListCountry = async () => {
+			const result = await getCountries();
+			if (result.status === 'ok') {
+				setCountries(result.data.countries);
+			}
+		};
+
+		getListCountry();
+	}, []);
+
+	return (
+		<form onSubmit={handleSubmit(onSubmit)} className="first-of-type:mt-7">
+			<div className="flex gap-[21px] justify-between mb-5">
+				<FormGroup>
+					<TextFieldRHF
+						name="firstname"
+						label="First Name*"
+						placeholder="Enter your first name"
+						register={register}
+					/>
+				</FormGroup>
+				<FormGroup>
+					<TextFieldRHF
+						name="lastname"
+						label="Last Name*"
+						placeholder="Enter your last name"
+						register={register}
+					/>
+				</FormGroup>
+			</div>
+			<FormGroup className="mb-5">
+				<TextFieldRHF
+					name="email"
+					type="email"
+					label="Email"
+					placeholder="Enter your email"
+					className="w-full"
+					register={register}
+				/>
+			</FormGroup>
+			<FormGroup className="mb-5 relative">
+				<SelectCountry
+					countries={countries}
+					name="country"
+					control={control}
+					label="Country"
+				/>
+			</FormGroup>
+			<FormGroup className="mb-5">
+				<label
+					htmlFor=""
+					className="block text-[15.4px] leading-5 text-[#666666] font-semibold mb-[6.98px]"
+				>
+					Whatsapp Number (with country code)*
+				</label>
+				<div className="flex gap-[14px] justify-around items-stretch">
+					<div className="bg-[#F5F6FA] rounded-[5px] flex justify-center items-center px-4">
+						<img src="/icons/telepone.svg" alt="telepone" />
+					</div>
+					<TextFieldRHF
+						name="mobile"
+						type="number"
+						placeholder="Phone number"
+						className="w-full"
+						register={register}
+					/>
+				</div>
+			</FormGroup>
+			<div className="flex gap-[21px] justify-between">
+				<FormGroup>
+					<label
+						htmlFor=""
+						className="block text-[15.4px] leading-5 text-[#666666] font-semibold mb-[6.98px]"
+					>
+						Password
+					</label>
+					<div className="relative">
+						<TextFieldRHF
+							name="password"
+							type="password"
+							placeholder="Enter your password"
+							register={register}
+						/>
+						<span className="before:content-[url('/icons/hidden.svg')] before:mt-1 absolute right-0 w-[45px] h-full inline-flex items-center justify-center bg-white border border-[#F5F6FA] rounded-[5px]"></span>
+					</div>
+				</FormGroup>
+				<div>
+					<label
+						htmlFor=""
+						className="block text-[15.4px] leading-5 text-[#666666] font-semibold mb-[6.98px]"
+					>
+						Confirm Password
+					</label>
+					<div className="relative">
+						<TextFieldRHF
+							name="password_confirmation"
+							type="password"
+							placeholder="Confirm your password"
+							register={register}
+						/>
+						<span className="before:content-[url('/icons/hidden.svg')] before:mt-1 absolute right-0 w-[45px] h-full inline-flex items-center justify-center bg-white border border-[#F5F6FA] rounded-[5px]"></span>
+					</div>
+				</div>
+			</div>
+			<div className="flex gap-[14px] mt-9 mb-5">
+				<input type="checkbox" />
+				<label htmlFor="" className="text-[#666666] text-sm">
+					I agree to{' '}
+					<span className="text-[#23A455]">Terms and conditions</span>{' '}
+					and <span className="text-[#23A455]">Privacy Policy</span>
+				</label>
+			</div>
+			<Button
+				type="submit"
+				label="Create an account"
+				variant="secondary"
+				isFull
+			/>
+		</form>
+	);
 
 	return (
 		<form action="" className="first-of-type:mt-7">
@@ -61,7 +190,7 @@ export default function FormRegister() {
 				>
 					Country
 				</label>
-				<Listbox value={selectedPerson} onChange={setSelectedPerson}>
+				{/* <Listbox value={selectedPerson} onChange={setSelectedPerson}>
 					<Listbox.Button className="relative cursor-default text-sm leading-[21px] bg-[#F5F6FA] rounded-[5px] p-[15px] w-full text-left flex justify-between items-center text-[#D1D1D1]">
 						<span className="block truncate">
 							{selectedPerson.name}
@@ -82,7 +211,7 @@ export default function FormRegister() {
 							</Listbox.Option>
 						))}
 					</Listbox.Options>
-				</Listbox>
+				</Listbox> */}
 			</div>
 			<div className="mb-5">
 				<label
@@ -134,16 +263,14 @@ export default function FormRegister() {
 				</div>
 			</div>
 			<div className="flex gap-[14px] mt-9 mb-5">
-				<input type="checkbox" className="" />
+				<input type="checkbox" />
 				<label htmlFor="" className="text-[#666666] text-sm">
 					I agree to{' '}
 					<span className="text-[#23A455]">Terms and conditions</span>{' '}
 					and <span className="text-[#23A455]">Privacy Policy</span>
 				</label>
 			</div>
-			<button className="w-full bg-[#E7E7E7] h-[60px] border-[5px] text-[#666666]">
-				Create an account
-			</button>
+			<Button label="Create an account" variant="secondary" isFull />
 		</form>
 	);
 }
