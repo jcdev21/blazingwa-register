@@ -3,11 +3,6 @@ export type FormContextType = {
 	setDataForm: (name: string, value: string) => void;
 };
 
-export type CustomFormPropsType = {
-	children: React.ReactNode;
-	onSubmit: (values: { [key: string]: string }) => void;
-};
-
 type CommonFieldType = {
 	name: string;
 	label?: string;
@@ -25,5 +20,3 @@ export type SelectPropsType = Omit<
 	CommonFieldType,
 	'name' | 'placeholder' | 'defaultValue'
 >;
-
-export type DescriptionPropsType = CommonFieldType;

@@ -1,24 +1,29 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from '../../components';
-import FormGroup from '../../components/form-rhf/FormGroup';
-import SelectCountry, {
-	Country,
-} from '../../components/form-rhf/SelectCountry';
-import TextFieldRHF from '../../components/form-rhf/TextField';
+import { useNavigate } from 'react-router-dom';
+import { Button, FormGroup, SelectCountry, TextField } from '../../components';
+import { Country } from '../../components/form/SelectCountry';
 import { createMember } from '../../services/auth.service';
 import { getCountries } from '../../services/country.service';
 
 export default function FormRegister() {
 	const [countries, setCountries] = React.useState<Country[]>([]);
 	const { register, control, handleSubmit } = useForm();
+	const navigate = useNavigate();
+
 	const onSubmit = async (data: any) => {
 		const { country, ...payload } = data;
 		payload.country = country.iso;
 		payload.mobile_code = country.iso;
 
 		const result = await createMember(payload);
-		console.log(result);
+
+		if (result.status === 'ok') {
+			navigate('/register-package', {
+				state: { user_id: result.data.id },
+			});
+			return;
+		}
 	};
 
 	React.useEffect(() => {
@@ -36,7 +41,7 @@ export default function FormRegister() {
 		<form onSubmit={handleSubmit(onSubmit)} className="first-of-type:mt-7">
 			<div className="flex gap-[21px] justify-between mb-5">
 				<FormGroup>
-					<TextFieldRHF
+					<TextField
 						name="firstname"
 						label="First Name*"
 						placeholder="Enter your first name"
@@ -44,7 +49,7 @@ export default function FormRegister() {
 					/>
 				</FormGroup>
 				<FormGroup>
-					<TextFieldRHF
+					<TextField
 						name="lastname"
 						label="Last Name*"
 						placeholder="Enter your last name"
@@ -53,7 +58,7 @@ export default function FormRegister() {
 				</FormGroup>
 			</div>
 			<FormGroup className="mb-5">
-				<TextFieldRHF
+				<TextField
 					name="email"
 					type="email"
 					label="Email"
@@ -81,7 +86,7 @@ export default function FormRegister() {
 					<div className="bg-[#F5F6FA] rounded-[5px] flex justify-center items-center px-4">
 						<img src="/icons/telepone.svg" alt="telepone" />
 					</div>
-					<TextFieldRHF
+					<TextField
 						name="mobile"
 						type="number"
 						placeholder="Phone number"
@@ -99,7 +104,7 @@ export default function FormRegister() {
 						Password
 					</label>
 					<div className="relative">
-						<TextFieldRHF
+						<TextField
 							name="password"
 							type="password"
 							placeholder="Enter your password"
@@ -116,7 +121,7 @@ export default function FormRegister() {
 						Confirm Password
 					</label>
 					<div className="relative">
-						<TextFieldRHF
+						<TextField
 							name="password_confirmation"
 							type="password"
 							placeholder="Confirm your password"

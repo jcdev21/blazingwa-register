@@ -23,17 +23,3 @@ export async function createMember(payload: PayloadType) {
 		};
 	}
 }
-
-export async function login(
-	payload: Omit<PayloadType, 'password_confirmation'>
-) {
-	try {
-		const res = await axios.post(`${config.apiHost}/auth/login`, payload);
-		return res.data;
-	} catch (error: any) {
-		return {
-			error: true,
-			message: error?.message,
-		};
-	}
-}

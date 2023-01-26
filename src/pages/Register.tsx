@@ -1,14 +1,11 @@
-import { Navigate, useNavigate } from 'react-router-dom';
-import DropdownLanguage from '../components/dropdown-language';
+import { Navigate } from 'react-router-dom';
 import SidebarInfo from '../components/layouts/SidebarInfo';
 import Topbar from '../components/layouts/Topbar';
 import useAuth from '../hooks/useAuth';
-import FormRegister from '../modules/auth/FormRegister';
 import WrapperFormRegister from '../modules/auth/WrapperFormRegister';
 
 export default function Register() {
-	const navigate = useNavigate();
-	const { accessToken, dispatch } = useAuth();
+	const { accessToken } = useAuth();
 
 	if (accessToken) return <Navigate to="/" />;
 
